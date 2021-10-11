@@ -18,10 +18,12 @@ public class PasswordEncodingTest {
 
     @Test
     void bcryptTest(){
-        PasswordEncoder bcrypt = new BCryptPasswordEncoder();
+        PasswordEncoder bcrypt = new BCryptPasswordEncoder(15);
 
         System.out.println(bcrypt.encode(PASSWORD));
         System.out.println(bcrypt.encode(PASSWORD));
+        System.out.println(bcrypt.encode("tiger"));
+        System.out.println(bcrypt.encode("guru"));
     }
 
     @Test
@@ -36,6 +38,7 @@ public class PasswordEncodingTest {
         PasswordEncoder ldap = new LdapShaPasswordEncoder();
         System.out.println(ldap.encode(PASSWORD));
         System.out.println(ldap.encode(PASSWORD));
+        System.out.println(ldap.encode("tiger"));
 
         String encodedPass = ldap.encode(PASSWORD);
 
