@@ -1,15 +1,34 @@
 package guru.sfg.brewery.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import javax.naming.ldap.LdapContext;
+import javax.security.auth.login.CredentialNotFoundException;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Bean
+    PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -29,4 +48,38 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().and()
                 .httpBasic();
     }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .inMemoryAuthentication()
+                .withUser("spring")
+                .password("$2a$10$vhQpTcqyDRaw2P2VdAHXtOxr2Ug8FUiqNoPn7fbo20ujlIqVOMbq2")
+                .roles("ADMIN")
+                .and()
+                .withUser("user")
+                .password("$2a$10$vhQpTcqyDRaw2P2VdAHXtOxr2Ug8FUiqNoPn7fbo20ujlIqVOMbq2")
+                .roles("USER")
+                .and()
+                .withUser("scott")
+                .password("tiger")
+                .roles("CUSTOMER");
+    }
+
+    //    @Override
+//    @Bean
+//    protected UserDetailsService userDetailsService() {
+//        UserDetails admin = User.withDefaultPasswordEncoder()
+//                .username("spring")
+//                .password("guru")
+//                .roles("ADMIN")
+//                .build();
+//
+//        UserDetails user = User.withDefaultPasswordEncoder()
+//                .username("user")
+//                .password("password")
+//                .roles("USER")
+//                .build();
+//        return new InMemoryUserDetailsManager(admin, user);
+//    }
 }
