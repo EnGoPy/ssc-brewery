@@ -30,6 +30,39 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BeerControllerIT extends BaseIT{
 
     @Test
+    void findBeersADMIN() throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.get("/beers/find")
+                        .with(httpBasic("spring", "guru")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("beers/findBeers"))
+                .andExpect(model().attributeExists("beer"));
+    }
+
+    @Test
+    void findBeersUSER() throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.get("/beers/find")
+                        .with(httpBasic("user", "password")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("beers/findBeers"))
+                .andExpect(model().attributeExists("beer"));
+    }
+
+    @Test
+    void findBeersCUSTOMER() throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.get("/beers/find")
+                        .with(httpBasic("scott", "tiger")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("beers/findBeers"))
+                .andExpect(model().attributeExists("beer"));
+    }
+
+    @Test
+    void findBeersNOROLE() throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.get("/beers/find"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void initCreationFormWithSpring() throws Exception{
         mockMvc.perform(MockMvcRequestBuilders.get("/beers/new")
                         .with(httpBasic("spring", "guru")))
@@ -48,11 +81,9 @@ public class BeerControllerIT extends BaseIT{
     }
 
     @Test
-    void findBeersWithHttpBasic() throws Exception {
+    void findBeersWithHttpBasicNOROLE() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/beers/find"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("beers/findBeers"))
-                .andExpect(model().attributeExists("beer"));
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
