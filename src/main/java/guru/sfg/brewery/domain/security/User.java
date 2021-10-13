@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -21,11 +22,14 @@ public class User {
     private String username;
     private String password;
 
-    @Singular
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(name = "user_authority",
+        @Singular
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
     joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
-    inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
+    inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
+    private Set<Role> roles;
+
+    @Transient
     private Set<Authority> authorities;
 
     @Builder.Default
@@ -36,4 +40,11 @@ public class User {
     private Boolean credentialsNonExpired =true;
     @Builder.Default
     private Boolean enabled =true;
+
+    public Set<Authority> getAuthorities(){
+        return this.roles.stream()
+                .map(Role::getAuthorities)
+                .flatMap(Set::stream)
+                .collect(Collectors.toSet());
+    }
 }

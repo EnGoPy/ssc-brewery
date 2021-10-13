@@ -10,9 +10,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -27,9 +24,9 @@ public class UserDataLoader implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
 
     private void loadSecurityData() {
-        Authority admin = authorityRepository.save(Authority.builder().role("ROLE_ADMIN").build());
-        Authority user = authorityRepository.save(Authority.builder().role("ROLE_USER").build());
-        Authority customer = authorityRepository.save(Authority.builder().role("ROLE_CUSTOMER").build());
+        Authority admin = authorityRepository.save(Authority.builder().permission("ROLE_ADMIN").build());
+        Authority user = authorityRepository.save(Authority.builder().permission("ROLE_USER").build());
+        Authority customer = authorityRepository.save(Authority.builder().permission("ROLE_CUSTOMER").build());
 
         userRepository.save(User.builder()
                 .username("spring")
