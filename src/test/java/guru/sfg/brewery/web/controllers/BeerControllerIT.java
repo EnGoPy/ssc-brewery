@@ -75,7 +75,7 @@ public class BeerControllerIT extends BaseIT{
     @Test
     void findBeers() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/beers/find"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
