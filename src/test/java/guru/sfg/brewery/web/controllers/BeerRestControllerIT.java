@@ -78,8 +78,6 @@ public class BeerRestControllerIT extends BaseIT{
     @Nested
     class DeleteTests{
 
-
-
         @Test
         void findBeerFormADMIN() throws Exception{
             mockMvc.perform(MockMvcRequestBuilders.get("/beers")
@@ -171,7 +169,7 @@ public class BeerRestControllerIT extends BaseIT{
         @Test
         void findBeerByUpc() throws Exception{
             mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/beerUpc/"+ existingBeer().getUpc()))
-                    .andExpect(status().isOk());
+                    .andExpect(status().isUnauthorized());
         }
     }
 }
