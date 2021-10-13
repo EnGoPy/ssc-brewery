@@ -71,14 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                     "/webjars/**",
                                     "/login",
                                     "/h2-console/**", //do not use in production
-                                    "/resources/**").permitAll()
-                            .antMatchers("/beers/find", "/beers*").permitAll()
-                            .antMatchers("/beers/find").hasAnyRole("ADMIN","USER","CUSTOMER")
-                            .antMatchers(HttpMethod.GET, "/api/v1/beer/**").permitAll()
-                            .mvcMatchers("/brewery/breweries/**").hasAnyRole("ADMIN","CUSTOMER")
-                            .mvcMatchers(HttpMethod.GET, "/brewery/api/v1/breweries").hasRole("CUSTOMER")
-                            .mvcMatchers(HttpMethod.GET, "/brewery/api/v1/breweries").hasRole("CUSTOMER")
-                            .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}").hasAnyRole("ADMIN", "USER", "CUSTOMER");
+                                    "/resources/**").permitAll();
                 })
                 .authorizeRequests()
                 .anyRequest().authenticated()

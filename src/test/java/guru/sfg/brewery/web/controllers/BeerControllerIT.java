@@ -71,13 +71,11 @@ public class BeerControllerIT extends BaseIT{
                 .andExpect(model().attributeExists("beer"));
     }
 
-    @WithMockUser("lol")
+
     @Test
     void findBeers() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/beers/find"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("beers/findBeers"))
-                .andExpect(model().attributeExists("beer"));
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -88,18 +86,16 @@ public class BeerControllerIT extends BaseIT{
 
     @Test
     void initCreationForm() throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.get("/beers/new").with(httpBasic("user", "password")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("beers/createBeer"))
-                .andExpect(model().attributeExists("beer"));
+        mockMvc.perform(MockMvcRequestBuilders.get("/beers/new")
+                        .with(httpBasic("user", "password")))
+                .andExpect(status().isForbidden());
     }
 
     @Test
     void initCreationFormForScott() throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.get("/beers/new").with(httpBasic("scott", "tiger")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("beers/createBeer"))
-                .andExpect(model().attributeExists("beer"));
+        mockMvc.perform(MockMvcRequestBuilders.get("/beers/new")
+                        .with(httpBasic("scott", "tiger")))
+                .andExpect(status().isForbidden());
     }
 
 }
