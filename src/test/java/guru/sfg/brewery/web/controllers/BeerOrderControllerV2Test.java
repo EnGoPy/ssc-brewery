@@ -103,7 +103,7 @@ public class BeerOrderControllerV2Test extends BaseIT{
     void getByOrderIdCustomerAuth() throws Exception {
         BeerOrder beerOrder = stPeteCustomer.getBeerOrders().stream().findFirst().orElseThrow();
 
-        mockMvc.perform(MockMvcRequestBuilders.get(API_ROOT + beerOrder.getId()))
+        mockMvc.perform(MockMvcRequestBuilders.get(API_ROOT + beerOrder.getId().toString()))
                 .andExpect(status().is2xxSuccessful());
     }
 
